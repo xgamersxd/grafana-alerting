@@ -1,0 +1,18 @@
+{{ define "values_list2" }}{{ if len .Values }}{{ range $refID, $value := .Values -}}
+{{ if eq $refID "D" }}{{ if ge ($value) 500.0 }}🚩{{ end }}Код ответа: {{ $value }}{{ end }}{{ end -}}{{ else }}[no value]{{ end }}{{ end }}
+
+
+{{ define "alert_list" }}{{ range . }}{{ range .Annotations.SortedPairs }}{{ if eq .Value "Updated" }}✅{{ end }}{{ .Value }}
+{{ end }}<pre>{{ template "values_list2" . }}
+Источник:
+{{ range .Labels.SortedPairs }} • {{ if eq .Value "DatasourceNoData" }}❌❌❌{{ .Value }}{{ else }}{{ .Name }} = {{ .Value }}{{ end }}
+{{ end }}</pre>
+{{ end }}{{ end }}
+
+{{ define "nt-http-alert" }}{{ if gt (len .Alerts.Firing) 0 }}<b>⚠️Внимание!</b>
+
+{{ template "alert_list" .Alerts.Firing }}{{ if gt (len .Alerts.Resolved) 0 }}
+
+{{ end }}{{ end }}{{ if gt (len .Alerts.Resolved) 0 }}<b>✅Решено</b>
+
+{{ template "alert_list" .Alerts.Resolved }}{{ end }}{{ end }}

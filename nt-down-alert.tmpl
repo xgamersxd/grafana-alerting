@@ -1,0 +1,8 @@
+{{ define "alert_list3" }}{{ range . }}{{ range .Labels.SortedPairs }}{{ if eq .Name "instance" }}{{ .Value }}{{ end }}{{ if eq .Value "DatasourceNoData" }}❌❌❌{{ .Value }}{{ end }}{{ end }}
+{{ end }}{{ end }}
+
+{{ define "nt-down-alert" }}{{ if gt (len .Alerts.Firing) 0 }}<b>🚩Серверы недоступны</b><pre>
+{{ template "alert_list3" .Alerts.Firing }}</pre>{{ if gt (len .Alerts.Resolved) 0 }}
+
+{{ end }}{{ end }}{{ if gt (len .Alerts.Resolved) 0 }}<b>🌐Серверы снова доступны</b><pre>
+{{ template "alert_list3" .Alerts.Resolved }}</pre>{{ end }}{{ end }}

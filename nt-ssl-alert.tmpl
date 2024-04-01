@@ -1,0 +1,15 @@
+{{ define "values_list_NEW_1710314427171" }}{{ if len .Values }}{{ range $refID, $value := .Values -}}
+{{ if eq $refID "C" }}{{ if lt ($value) 7.0 }}🚩🚩🚩{{ end }}Дней действия SSL сертификата осталось: {{ printf "%.1f" $value }}{{ end }}{{ end -}}{{ else }}[no value]{{ end }}{{ end }}
+
+{{ define "alert_list_NEW_1710314427171" }}{{ range . }}{{ range .Annotations.SortedPairs }}{{ if eq .Value "Updated" }}✅{{ end }}{{ .Value }}
+{{ end }}<pre>{{ template "values_list_NEW_1710314427171" . }}
+Источник:
+{{ range .Labels.SortedPairs }} • {{ if eq .Value "DatasourceNoData" }}❌❌❌{{ .Value }}{{ else }}{{ .Name }} = {{ .Value }}{{ end }}
+{{ end }}</pre>
+{{ end }}{{ end }}
+
+{{ define "nt-ssl-alert" }}{{ if gt (len .Alerts.Firing) 0 }}<b>⚠️Внимание!</b>
+{{ template "alert_list_NEW_1710314427171" .Alerts.Firing }}{{ if gt (len .Alerts.Resolved) 0 }}
+
+{{ end }}{{ end }}{{ if gt (len .Alerts.Resolved) 0 }}<b>✅Решено</b>
+{{ template "alert_list_NEW_1710314427171" .Alerts.Resolved }}{{ end }}{{ end }}
