@@ -1,2 +1,2 @@
 # grafana-alerting
-Grafana notification templates for Telegra,
+Grafana notification templates for Telegram
