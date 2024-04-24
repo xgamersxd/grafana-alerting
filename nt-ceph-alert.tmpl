@@ -1,0 +1,17 @@
+{{ define "values_list_ceph" }}{{ if len .Values }}{{ range $refID, $value := .Values -}}
+{{ if eq $refID "A" }}📌Статус кластера Ceph: {{ if eq ($value) 2.0 }}🚩Error{{ end }}{{ if eq ($value) 1.0 }}📣Warning{{ end }}{{ end }}{{ end -}}{{ else }}❤️Healthy{{ end }}{{ end }}
+
+{{ define "alert_list_ceph" }}{{ range . }}{{ range .Annotations.SortedPairs }}{{ if eq .Value "Updated" }}✅{{ end }}{{ .Value }}
+{{ end }}<pre>{{ template "values_list_ceph" . }}
+Источник:
+{{ range .Labels.SortedPairs }} • {{ if eq .Value "DatasourceNoData" }}❌❌❌{{ .Value }}{{ else }}{{ if eq .Name "instance" }}⚡{{ end }}{{ .Name }} = {{ .Value }}{{ end }}
+{{ end }}</pre>
+{{ end }}{{ end }}
+
+{{ define "nt-ceph-alert" }}{{ if gt (len .Alerts.Firing) 0 }}<b>⚠️Внимание!</b>
+
+{{ template "alert_list_ceph" .Alerts.Firing }}{{ if gt (len .Alerts.Resolved) 0 }}
+
+{{ end }}{{ end }}{{ if gt (len .Alerts.Resolved) 0 }}<b>✅Решено</b>
+
+{{ template "alert_list_ceph" .Alerts.Resolved }}{{ end }}{{ end }}

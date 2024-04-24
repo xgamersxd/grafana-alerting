@@ -1,0 +1,14 @@
+{{ define "alert_list_ceph-ds" }}{{ range . }}{{ range .Annotations.SortedPairs }}{{ if eq .Value "Updated" }}✅{{ end }}{{ .Value }}
+{{ end }}
+Источник:
+{{ range .Labels.SortedPairs }} • {{ if eq .Value "DatasourceNoData" }}❌❌❌{{ .Value }}{{ else }}{{ if eq .Name "instance" }}⚡{{ end }}{{ .Name }} = {{ .Value }}{{ end }}
+{{ end }}</pre>
+{{ end }}{{ end }}
+
+{{ define "nt-ceph-ds-alert" }}{{ if gt (len .Alerts.Firing) 0 }}<b>⚠️Внимание!</b>
+
+{{ template "alert_list_ceph-ds" .Alerts.Firing }}{{ if gt (len .Alerts.Resolved) 0 }}
+
+{{ end }}{{ end }}{{ if gt (len .Alerts.Resolved) 0 }}<b>✅Решено</b>
+
+{{ template "alert_list_ceph-ds" .Alerts.Resolved }}{{ end }}{{ end }}

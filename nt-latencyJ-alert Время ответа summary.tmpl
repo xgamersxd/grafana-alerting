@@ -1,0 +1,1 @@
+<blockquote>{{ range $v := $values -}}{{ $formatted := printf "%.2f" $v }}{{ $formatted1 := reReplaceAll "{map\\[.*\\]" "" $formatted }}{{ $formatted2 := reReplaceAll "\\}$" "" $formatted1 }}<code>{{ $v.Labels.instance }}</code> - {{ $formatted2 }} сек.{{ end }}</blockquote>
