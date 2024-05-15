@@ -1,0 +1,10 @@
+{{ define "alert_list_node_disk" }}{{ range . }}{{ range .Labels.SortedPairs }}{{ if eq .Name "node" }}{{ .Value }}{{ end }}{{ if eq .Value "DatasourceNoData" }}❌❌❌{{ .Value }}{{ end }}{{ end }} {{ range .Annotations.SortedPairs }}{{ if ne .Value "Updated" }}{{ .Value }}{{ end }}
+{{ end }}{{ end }}{{ end }}
+
+{{ define "nt-node-disk-alert" }}{{ if gt (len .Alerts.Firing) 0 }}<b>⛔Высокий % занятого дискового пространства на узлах:</b>
+<pre>Узел                  Занято
+{{ template "alert_list_node_disk" .Alerts.Firing }}</pre>{{ if gt (len .Alerts.Resolved) 0 }}
+
+{{ end }}{{ end }}{{ if gt (len .Alerts.Resolved) 0 }}<b>🆗Дисковое пространство на узлах в норме:</b>
+<pre>Узел                  Занято
+{{ template "alert_list_node_disk" .Alerts.Resolved }}</pre>{{ end }}<blockquote> Порог занятого места 95%</blockquote>{{ end }}

@@ -1,0 +1,12 @@
+{{ define "alert_list_co" }}{{ range . }}{{ range .Annotations.SortedPairs }}{{ if eq .Value "Updated" }}✅{{ end }}{{ .Value }}
+{{ end }}{{ range .Labels.SortedPairs }} • {{ if eq .Value "DatasourceNoData" }}❌❌❌{{ .Value }}{{ else }}{{ .Name }} = {{ .Value }}{{ end }}
+{{ end }}</pre>
+{{ end }}{{ end }}
+
+{{ define "nt-co-alert" }}{{ if gt (len .Alerts.Firing) 0 }}<b>⚠️Внимание! Операторы кластера недоступны</b>
+
+{{ template "alert_list_co" .Alerts.Firing }}{{ if gt (len .Alerts.Resolved) 0 }}
+
+{{ end }}{{ end }}{{ if gt (len .Alerts.Resolved) 0 }}<b>✅Решено! Все операторы доступны</b>
+
+{{ template "alert_list_co" .Alerts.Resolved }}{{ end }}{{ end }}

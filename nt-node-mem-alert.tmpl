@@ -1,0 +1,14 @@
+{{ define "values_list_node_mem" }}{{ if len .Values }}{{ range $refID, $value := .Values -}}
+{{ if eq $refID "A" }}Нагрузка: {{ printf "%.1f" $value }}{{ end }}{{ end -}}{{ else }}[no value]{{ end }}{{ end }}
+
+{{ define "alert_list_node_mem" }}{{ range . }}{{ range .Labels.SortedPairs }}{{ if eq .Name "node" }}{{ .Value }}{{ end }}{{ if eq .Value "DatasourceNoData" }}❌❌❌{{ .Value }}{{ end }}{{ end }} {{ template "values_list_node_mem" . }}%
+{{ range .Annotations.SortedPairs }}{{ if ne .Value "Updated" }}{{ .Value }}{{ end }}
+{{ end }}{{ end }}{{ end }}
+
+{{ define "nt-node-mem-alert" }}{{ if gt (len .Alerts.Firing) 0 }}<b>⛔Высокая нагрузка ОЗУ на узлах:</b>
+<pre>Узел                  Нагрузка
+{{ template "alert_list_node_mem" .Alerts.Firing }}</pre>{{ if gt (len .Alerts.Resolved) 0 }}
+
+{{ end }}{{ end }}{{ if gt (len .Alerts.Resolved) 0 }}<b>🆗Нагрузка ОЗУ на узлах вернулась в норму:</b>
+<pre>Узел                  Нагрузка
+{{ template "alert_list_node_mem" .Alerts.Resolved }}</pre>{{ end }}<blockquote> Порог нагрузки 95%</blockquote>{{ end }}

@@ -1,0 +1,6 @@
+<blockquote>{{ range $v := $values }}<code>{{ $v.Labels.name }}: {{ $v.Labels.condition }}</code>
+{{ end }}</blockquote> <pre>Источник:
+ • namespace = {{ $values.B1.Labels.namespace }}
+ • instance = {{ $values.B1.Labels.instance }}
+ • job = {{ $values.B1.Labels.job }}
+ • pod = {{ $values.B1.Labels.pod }}
